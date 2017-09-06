@@ -35,6 +35,7 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
         #self.execButton.clicked.connect(self.execFunction)
         #thread_instance = Thread()
         #thread_instance.start()
+        self.updateLog()
         self.timer()
 
     def timer(self):
