@@ -4,12 +4,14 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 
+#from sklearn.preprocessing import StandardScaler
+#StandardScaler().fit_transform(data)
 
 class IqNeuralNetwork():
     # LSTM
     #layer
         # neuron 6 -- 3 -- 1
-    def __init__(self, nCluster=30):
+    def __init__(self, inputShape, nCluster=30):
         self.WINDOW = 2
         self.EMB_SIZE = 5
         self.STEP = 1
@@ -20,12 +22,12 @@ class IqNeuralNetwork():
 
         self.model = Sequential()
         self.model.add(LSTM(
-            input_dim=1,
+            input_dim=inputShape,
             output_dim=nCluster,
             return_sequences=True
         ))
         self.model.add(Dropout(0.2))
-        self.model.add(LSTM(100, return_sequences=False))
+        self.model.add(LSTM(nCluster*2, return_sequences=False)) #nCluster*2, 100
         self.model.add(Dropout(0.2))
         self.model.add(Dense(output_dim=1))
         self.model.add(Activation('linear'))

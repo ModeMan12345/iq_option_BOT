@@ -26,7 +26,7 @@ class IQOption:
 
         self.setExpirationTime()
         self.setActives(self.active_id)
-        self.api.changebalance(self.demo)
+        #self.api.changebalance(self.demo)
 
     def openPosition(self, direction, amount=1):
         self.api.buy(amount, api_constants.ACTIVES[self.active_id], "turbo", direction)

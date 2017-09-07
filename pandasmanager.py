@@ -3,6 +3,7 @@ import datetime
 import numpy as np
 import pandas as pd
 
+
 class PandasManager():
     def __init__(self, nCluster=30):
         """

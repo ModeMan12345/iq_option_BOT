@@ -17,7 +17,6 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
     def __init__(self, parent=None):
         super(QtIQOption, self).__init__(parent)
 
-        self.iqStream = iq.IQOption()
         self.martingale = martingale.Martingale()
 
         self.setWindowTitle('IqOptionNeural')
