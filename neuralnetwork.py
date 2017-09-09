@@ -12,19 +12,20 @@ class IqNeuralNetwork():
     # LSTM
     #layer
         # neuron 6 -- 3 -- 1
-    def __init__(self, inputShape, nCluster=30):
-        self.model = self.build_model_OLD(inputShape, nCluster)
+    # [3,window,1] -- [nFeatures, seqLen, 1]
+    def __init__(self, nFeatures=1, seqLen=30, nCluster=1):
+        #self.model = self.build_model2([nFeatures, seqLen, 1])
+        self.model = self.build_model_OLD(seqLen)
 
-    def build_model_OLD(self, inputShape, nCluster):
+    def build_model_OLD(self, seqLen, nCluster):
         model = Sequential()
         model.add(LSTM(
-            input_dim=1,
-            output_dim=nCluster,
+            input_dim=nCluster,
+            output_dim=seqLen,
             return_sequences=True,
-            input_shape=inputShape
         ))
         model.add(Dropout(0.2))
-        model.add(LSTM(nCluster * 2, return_sequences=False))  # nCluster*2, 100
+        model.add(LSTM(seqLen * 2, return_sequences=False))  # nCluster*2, 100
         model.add(Dropout(0.2))
         model.add(Dense(output_dim=1))
         model.add(Activation('linear'))
