@@ -34,7 +34,7 @@ class IqNeuralNetwork():
 
         return model
 
-    def build_model(layers):
+    def build_model(self, layers):
         model = Sequential()
 
         model.add(LSTM(
