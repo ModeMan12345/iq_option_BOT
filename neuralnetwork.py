@@ -15,49 +15,9 @@ class IqNeuralNetwork():
     # [3,window,1] -- [nFeatures, seqLen, 1]
     # layer --- len , seqLen, nFeatures
     def __init__(self, nFeatures=5, seqLen=30, nCluster=1):
-        self.model = self.build_model2([nFeatures, seqLen, 1])
-
-    def build_model_OLD(self, seqLen, nCluster):
-        model = Sequential()
-        model.add(LSTM(
-            input_shape=(None, seqLen, 1),
-            return_sequences=True,
-        ))
-        model.add(Dropout(0.2))
-        model.add(LSTM(seqLen * 2, return_sequences=False))  # nCluster*2, 100
-        model.add(Dropout(0.2))
-        model.add(Dense(output_dim=1))
-        model.add(Activation('linear'))
-
-        # LAYER
-        model.compile(loss='mse', optimizer='rmsprop')
-
-        return model
+        self.model = self.build_model([nFeatures, seqLen, 1])
 
     def build_model(self, layers):
-        model = Sequential()
-
-        model.add(LSTM(
-            input_dim=layers[0],
-            output_dim=layers[1],
-            return_sequences=True))
-        model.add(Dropout(0.2))
-
-        model.add(LSTM(
-            layers[2],
-            return_sequences=False))
-        model.add(Dropout(0.2))
-
-        model.add(Dense(
-            output_dim=layers[2]))
-        model.add(Activation("linear"))
-
-        start = time.time()
-        model.compile(loss="mse", optimizer="rmsprop", metrics=['accuracy'])
-        print("Compilation Time : ", time.time() - start)
-        return model
-
-    def build_model2(self, layers):
         d = 0.2
         model = Sequential()
         model.add(LSTM(128, input_shape=(layers[1], layers[0]), return_sequences=True))
@@ -99,10 +59,15 @@ class IqNeuralNetwork():
         x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], amount_of_features))
         x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], amount_of_features))
 
+        self.x_train, self.y_train, self.x_test, self.y_test = [x_train, y_train, x_test, y_test]
+
         return [x_train, y_train, x_test, y_test]
 
     def train(self, x_train, y_train):
         self.model.fit(x_train, y_train, epochs=500, batch_size=512, validation_split=0.05)
+
+    # def train(self):
+    #     self.model.fit(self.x_train, self.y_train, epochs=500, batch_size=512, validation_split=0.05)
 
     def predict(self, X_test):
         predicted = self.model.predict(X_test)

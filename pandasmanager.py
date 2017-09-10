@@ -99,5 +99,5 @@ if __name__ == "__main__":
     matrix = test.readAllDataframe()
     matrix = matrix.drop('DateTime', axis=1)
     x_train, y_train, x_test, y_test = mNN.load_data(matrix, 30)
-    print y_train
+    #print x_train
     mNN.train(x_train, y_train)
