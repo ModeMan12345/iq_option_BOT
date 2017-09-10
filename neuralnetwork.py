@@ -51,13 +51,13 @@ class IqNeuralNetwork():
         result = np.array(result)
         row = round(0.9 * result.shape[0])
         train = result[:int(row), :]
-        x_train = train[:, :-1]
+        x_train = train[:, :][:,:-1]
         y_train = train[:, -1][:, -1]
         x_test = result[int(row):, :-1]
         y_test = result[int(row):, -1][:, -1]
 
-        x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], amount_of_features))
-        x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], amount_of_features))
+        x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], x_train.shape[2]))
+        x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], x_train.shape[2]))
 
         self.x_train, self.y_train, self.x_test, self.y_test = [x_train, y_train, x_test, y_test]
 

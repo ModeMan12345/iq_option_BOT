@@ -2,6 +2,7 @@ import os
 import datetime
 import numpy as np
 import pandas as pd
+from sklearn import preprocessing
 
 
 class PandasManager():
@@ -15,6 +16,12 @@ class PandasManager():
         # replace DateTime with Timestamp
         self.df = self.readLastNCluster(self.fullFile, nCluster)
         #self.printTest()
+
+    def normalizeData(self, df):
+        min_max_scaler = preprocessing.MinMaxScaler()
+        np_scaled = min_max_scaler.fit_transform(df)
+        df_normalized = pd.DataFrame(np_scaled)
+        return df_normalized
 
     def readXLSX(self, path=''):
         fullFile = pd.read_excel('DAT_XLSX_EURUSD_M1_201708.xlsx')
