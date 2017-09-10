@@ -10,18 +10,17 @@ from keras.layers.recurrent import LSTM
 
 class IqNeuralNetwork():
     # LSTM
-    #layer
-        # neuron 6 -- 3 -- 1
+    #input_shape(nb_samples, timesteps, input_dim) --- (4999, 30, 1)
+
     # [3,window,1] -- [nFeatures, seqLen, 1]
-    def __init__(self, nFeatures=1, seqLen=30, nCluster=1):
-        #self.model = self.build_model2([nFeatures, seqLen, 1])
-        self.model = self.build_model_OLD(seqLen)
+    # layer --- len , seqLen, nFeatures
+    def __init__(self, nFeatures=5, seqLen=30, nCluster=1):
+        self.model = self.build_model2([nFeatures, seqLen, 1])
 
     def build_model_OLD(self, seqLen, nCluster):
         model = Sequential()
         model.add(LSTM(
-            input_dim=nCluster,
-            output_dim=seqLen,
+            input_shape=(None, seqLen, 1),
             return_sequences=True,
         ))
         model.add(Dropout(0.2))
@@ -65,8 +64,8 @@ class IqNeuralNetwork():
         model.add(Dropout(d))
         model.add(LSTM(64, input_shape=(layers[1], layers[0]), return_sequences=False))
         model.add(Dropout(d))
-        model.add(Dense(16, init='uniform', activation='relu'))
-        model.add(Dense(1, init='uniform', activation='relu'))
+        model.add(Dense(16, kernel_initializer='uniform', activation='relu'))
+        model.add(Dense(1, kernel_initializer='uniform', activation='relu'))
         model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
         return model
 
@@ -103,7 +102,7 @@ class IqNeuralNetwork():
         return [x_train, y_train, x_test, y_test]
 
     def train(self, x_train, y_train):
-        self.model.fit(x_train, y_train, nb_epochs=1, batch_size=512, validation_split=0.05)
+        self.model.fit(x_train, y_train, epochs=500, batch_size=512, validation_split=0.05)
 
     def predict(self, X_test):
         predicted = self.model.predict(X_test)

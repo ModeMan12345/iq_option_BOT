@@ -14,7 +14,7 @@ class PandasManager():
         self.fullFile = self.readXLSX()
         # replace DateTime with Timestamp
         self.df = self.readLastNCluster(self.fullFile, nCluster)
-        self.printTest()
+        #self.printTest()
 
     def readXLSX(self, path=''):
         fullFile = pd.read_excel('DAT_XLSX_EURUSD_M1_201708.xlsx')
@@ -30,6 +30,9 @@ class PandasManager():
             print row[0]
 
         #print self.fullFile['DateTime']
+
+    def readAllDataframe(self):
+        return self.fullFile
 
     def readLastNCluster(self, dataFrame, nCluster):
         """
@@ -89,3 +92,12 @@ class PandasManager():
 
 if __name__ == "__main__":
     test = PandasManager()
+
+    import neuralnetwork as nn
+
+    mNN = nn.IqNeuralNetwork()
+    matrix = test.readAllDataframe()
+    matrix = matrix.drop('DateTime', axis=1)
+    x_train, y_train, x_test, y_test = mNN.load_data(matrix, 30)
+    print y_train
+    mNN.train(x_train, y_train)
