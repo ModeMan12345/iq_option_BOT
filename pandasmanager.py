@@ -104,7 +104,8 @@ if __name__ == "__main__":
 
     mNN = nn.IqNeuralNetwork()
     matrix = test.readAllDataframe()
+    print matrix
     matrix = matrix.drop('DateTime', axis=1)
     x_train, y_train, x_test, y_test = mNN.load_data(matrix, 30)
-    #print x_train
+    print x_train.shape
     mNN.train(x_train, y_train)
