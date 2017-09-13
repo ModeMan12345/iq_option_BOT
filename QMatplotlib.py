@@ -8,9 +8,9 @@ from matplotlib.finance import candlestick2_ohlc
 
 import random
 
-class Window(QDialog):
+class QMatplotlib(QDialog):
     def __init__(self, parent=None):
-        super(Window, self).__init__(parent)
+        super(QMatplotlib, self).__init__(parent)
 
         # a figure instance to plot on
         self.figure = plt.figure()
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     import pandasmanager
     app = QApplication(sys.argv)
 
-    main = Window()
+    main = QMatplotlib()
     test = pandasmanager.PandasManager()
     df = test.readAllDataframe()
     main.addDataframe(df=df)

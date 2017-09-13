@@ -9,31 +9,38 @@ from PyQtX import QtCore, QtWidgets
 
 import iqoption as iq
 import martingale
-#import neuralnetwork as nn
-import model
+import pandasmanager
+import QMatplotlib
+import neuralnetwork as nn
+#import model
 
 
 class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
     def __init__(self, parent=None):
         super(QtIQOption, self).__init__(parent)
 
+        # Initialize Core
         self.martingale = martingale.Martingale()
-
-        self.setWindowTitle('IqOptionNeural')
-        self.layout = QtWidgets.QGridLayout()
-        self.log = QtWidgets.QTextEdit()
-
-        self.layout.addWidget(self.log)
-        self.setLayout(self.layout)
-
-        #self.neural = nn.IqNeuralNetwork()
+        self.neural = nn.IqNeuralNetwork()
         self.iqStream = iq.IQOption()
 
+        # Initialize UI
+        self.setWindowTitle('IqOptionNeural')
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.layout = QtWidgets.QGridLayout()
+        self.log = QtWidgets.QTextEdit()
+        self.graph = QMatplotlib.QMatplotlib()
+
+        # Layout
+        self.layout.addWidget(self.log)
+        self.layout.addWidget(self.graph)
+        self.setLayout(self.layout)
 
         # TEST
         #self.execButton.clicked.connect(self.execFunction)
-        #thread_instance = Thread()
-        #thread_instance.start()
+
+        # Startup
+        self.bootstrapCounter = 0
         self.updateLog()
         self.timer()
 
@@ -45,11 +52,18 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
         print('Timer Started')
 
     def updateLog(self):
-        result = self.iqStream.getResult()
-        print 'TRADE RESULT: ', result
-        self.martingale.calc(result)# ToDo
+        # Boostrap
+        if self.bootstrapCounter > 30:
+            result = self.iqStream.getResult()
+            print 'TRADE RESULT: ', result
+            self.martingale.calc(result)# ToDo
 
-        self.invest(self.martingale.getCurrentInvest())
+            self.invest(self.martingale.getCurrentInvest())
+        else:
+            self.log.append('Whait ' + str(30-self.bootstrapCounter) + ' minutes to Start!')
+            # get last 3 Candle
+            # Draw chart
+            self.bootstrapCounter = self.bootstrapCounter + 1
 
     def invest(self, amount=1):
         data = self.iqStream.getDataFrame()
@@ -61,9 +75,8 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
         if not data.empty:
             old, last, current = self.iqStream.getCandles()
 
-            result = model.expression(old[0], old[2], old[3], old[1],
-                                      last[0], last[2], last[3], last[1],
-                                      current[0], current[2], current[3])
+            # add last candle
+            result = self.neural.predict()## to do
 
             lastClose = last[2]
             print 'FORECAST PRICE: ', result
