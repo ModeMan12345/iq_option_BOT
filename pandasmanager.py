@@ -69,7 +69,7 @@ class PandasManager():
             'Result': result
         }
 
-        self.fullFile.append(candlesDF)
+        self.fullFile.append(candlesDF, ignore_index=True)
 
     def getTimeFromTimestamp(self, timestamp):
         """
@@ -108,4 +108,9 @@ if __name__ == "__main__":
     matrix = matrix.drop('DateTime', axis=1)
     x_train, y_train, x_test, y_test = mNN.load_data(matrix, 30)
     print x_train.shape
-    mNN.train(x_train, y_train)
+    #mNN.train(x_train, y_train)
+    #mNN.saveModel()
+    #X = mNN.load_data(test.readLastNCluster(matrix.ix[:,:-1],30),30)
+    #print X
+    predict = mNN.predict(x_test)
+    print predict

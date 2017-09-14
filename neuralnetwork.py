@@ -78,6 +78,7 @@ class IqNeuralNetwork():
 
     def predict(self, X_test):
         predicted = self.model.predict(X_test)
+        #predicted = self.model.predict_on_batch(X_test)
         return predicted
 
     def run(self, df):

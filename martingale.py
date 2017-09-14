@@ -9,8 +9,8 @@ class Martingale():
     def getCurrentInvest(self):
         return self.invest_current
 
-    def calc(self, lose):
-        if lose:
+    def calc(self, result):
+        if result == 'loose':
             self.invest_current = self.invest_current * 2 * self.percent
             if self.invest_current > self.max_martingale:
                 return round(self.invest_def, 2)

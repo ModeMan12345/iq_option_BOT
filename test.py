@@ -32,12 +32,12 @@ print close.head(10)
 
 import iqoption as iq
 
-iqStream = iq.IQOption(active_id="BTCX")
+iqStream = iq.IQOption()
 
 print iqStream.getExpirationDateTime()
 print iqStream.getServerDateTime()
 
 while True:
-    iqStream.openPosition(direction="call")
-    print 'call'
+    print 'result: '
+    print iqStream.getResult()
     time.sleep(1)

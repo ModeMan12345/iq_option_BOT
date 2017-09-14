@@ -97,7 +97,7 @@ class IQOption:
 
                 df = pd.DataFrame(candlesDF)
             except:
-                return ''
+                return None
 
         return df
 

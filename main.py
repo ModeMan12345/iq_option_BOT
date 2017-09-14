@@ -23,6 +23,7 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
         self.martingale = martingale.Martingale()
         self.neural = nn.IqNeuralNetwork()
         self.iqStream = iq.IQOption()
+        self.dataframeManager = pandasmanager.PandasManager()
 
         # Initialize UI
         self.setWindowTitle('IqOptionNeural')
@@ -61,9 +62,17 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
             self.invest(self.martingale.getCurrentInvest())
         else:
             self.log.append('Whait ' + str(30-self.bootstrapCounter) + ' minutes to Start!')
-            # get last 3 Candle
-            # Draw chart
             self.bootstrapCounter = self.bootstrapCounter + 1
+
+        candleData = self.iqStream.getCandles()
+        print candleData
+        if candleData:
+            self.dataframeManager.appendIQCandleRow(candleData)
+
+            # update chart
+            self.graph.clear()
+            self.graph.addDataframe(self.dataframeManager.readLastNCluster(self.dataframeManager.df, 30))
+            self.graph.plot()
 
     def invest(self, amount=1):
         data = self.iqStream.getDataFrame()
