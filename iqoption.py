@@ -48,7 +48,7 @@ class IQOption:
         self.api.getcandles(api_constants.ACTIVES[self.active_id], duration)
         candles = self.api.candles.candles_data
         while not candles:
-            print 'empty cnadle'
+            print 'empty candle'
             self.api.getcandles(api_constants.ACTIVES[self.active_id], duration)
             candles = self.api.candles.candles_data
 
@@ -92,22 +92,21 @@ class IQOption:
 
     def getDataFrame(self, duration=1):
         candles = self.getCandles(duration)
-        df = pd.DataFrame({})
         if candles:
             try:
+                # candlesDF -> dict type
                 candlesDF = {
-                    'DateTime': [candles[-3][0], candles[-2][0]],# candles[-1][0]],
-                    'Open': [candles[-3][1], candles[-2][1]],# candles[-1][1]],
-                    'Close': [candles[-3][2], candles[-2][2]],# candles[-1][2]],
-                    'High': [candles[-3][3], candles[-2][3]],# candles[-1][3]],
-                    'Low': [candles[-3][4], candles[-2][4]]#, candles[-1][4]]
+                    'DateTime': [candles[-3][0], candles[-2][0]],  # candles[-1][0]],
+                    'Open': [candles[-3][1], candles[-2][1]],  # candles[-1][1]],
+                    'Close': [candles[-3][2], candles[-2][2]],  # candles[-1][2]],
+                    'High': [candles[-3][3], candles[-2][3]],  # candles[-1][3]],
+                    'Low': [candles[-3][4], candles[-2][4]]  # , candles[-1][4]]
                 }
 
-                df = pd.DataFrame(candlesDF)
             except:
                 return None
 
-        return df
+        return candlesDF
 
 
 def round_up(tm, nearest=1):
