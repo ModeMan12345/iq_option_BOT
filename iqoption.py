@@ -29,7 +29,10 @@ class IQOption:
         #self.api.changebalance(self.demo)
 
     def openPosition(self, direction, amount=1):
+        while self.api.timesync.server_datetime.second != 0:
+            print self.api.timesync.server_datetime.second
         self.api.buy(amount, api_constants.ACTIVES[self.active_id], "turbo", direction)
+        sleep(0.5)
 
     def getBalance(self):
         return self.api.profile.balance
@@ -44,6 +47,11 @@ class IQOption:
     def getCandles(self, duration=1):
         self.api.getcandles(api_constants.ACTIVES[self.active_id], duration)
         candles = self.api.candles.candles_data
+        while not candles:
+            print 'empty cnadle'
+            self.api.getcandles(api_constants.ACTIVES[self.active_id], duration)
+            candles = self.api.candles.candles_data
+
         if candles:
             print 'Timestamp: ', datetime.datetime.fromtimestamp(int(candles[-1][0])).strftime('%Y-%m-%d %H:%M:%S')
             #print(datetime.datetime.fromtimestamp(int(candles[-1][0])).strftime('%Y-%m-%d %H:%M:%S'))

@@ -1,4 +1,6 @@
 import sys
+import numpy as np
+import pandas as pd
 from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QVBoxLayout
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -36,7 +38,8 @@ class QMatplotlib(QDialog):
 
         #store array
         self.prevision = []
-        #self.oldData = []
+        columns = ['DateTime', 'Open', 'Close', 'High', 'Low']
+        self.currentData = pd.DataFrame(np.nan, index=[0, 1, 2, 3], columns=columns)
 
     def plot(self):
         ''' plot some random stuff '''
@@ -48,8 +51,9 @@ class QMatplotlib(QDialog):
 
         # discards the old graph
         # ax.hold(False) # deprecated, see above
-
-        candlestick2_ohlc(ax, self.oldData['Open'], self.oldData['High'], self.oldData['Low'], self.oldData['Close'], width=0.6)
+        print 'PLOOOOOOOOOTTTTTT: '
+        print self.currentData
+        candlestick2_ohlc(ax, self.currentData['Open'], self.currentData['High'], self.currentData['Low'], self.currentData['Close'], width=0.6)
 
         # plot data
         #ax.plot(data, 'x-')
@@ -59,7 +63,7 @@ class QMatplotlib(QDialog):
         self.canvas.draw()
 
     def addDataframe(self, df):
-        self.oldData = df
+        self.currentData.append(df, ignore_index=True)
 
     def addPrevision(self, val):
         pass

@@ -54,24 +54,23 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
 
     def updateLog(self):
         # Boostrap
-        if self.bootstrapCounter > 30:
-            result = self.iqStream.getResult()
-            print 'TRADE RESULT: ', result
-            self.martingale.calc(result)# ToDo
-
-            self.invest(self.martingale.getCurrentInvest())
-        else:
-            self.log.append('Whait ' + str(30-self.bootstrapCounter) + ' minutes to Start!')
-            self.bootstrapCounter = self.bootstrapCounter + 1
-
         candleData = self.iqStream.getCandles()
-        print candleData
         if candleData:
             self.dataframeManager.appendIQCandleRow(candleData)
 
+            if self.bootstrapCounter > 30:
+                result = self.iqStream.getResult()
+                print 'TRADE RESULT: ', result
+                self.martingale.calc(result)# ToDo
+
+                #result = self.invest(self.martingale.getCurrentInvest())
+            else:
+                self.log.append('Whait ' + str(30-self.bootstrapCounter) + ' minutes to Start!')
+                self.bootstrapCounter = self.bootstrapCounter + 1
+
             # update chart
             self.graph.clear()
-            self.graph.addDataframe(self.dataframeManager.readLastNCluster(self.dataframeManager.df, 30))
+            self.graph.addDataframe(self.iqStream.getDataFrame())
             self.graph.plot()
 
     def invest(self, amount=1):
@@ -96,6 +95,8 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
             else:
                 self.iqStream.openPosition(amount=amount, direction="put")
                 print 'SELL'
+
+            return result
 
 
 if __name__ == "__main__":

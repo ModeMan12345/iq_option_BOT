@@ -14,7 +14,10 @@ class PandasManager():
 
         self.fullFile = self.readXLSX()
         # replace DateTime with Timestamp
-        self.df = self.readLastNCluster(self.fullFile, nCluster)
+
+        # Init empty current dataframe
+        columns = ['DateTime', 'Open', 'Close', 'High', 'Low']
+        self.df = pd.DataFrame(columns=columns)
         #self.printTest()
 
     def normalizeData(self, df):
@@ -41,7 +44,7 @@ class PandasManager():
     def readAllDataframe(self):
         return self.fullFile
 
-    def readLastNCluster(self, dataFrame, nCluster):
+    def readLastNCluster(self, nCluster):
         """
         Read the latest N row
         :param dataFrame:
@@ -49,7 +52,7 @@ class PandasManager():
         :return:
         """
         #return dataFrame.head(nCluster)
-        return dataFrame.tail(nCluster)
+        return self.df.tail(nCluster)
 
     def appendIQCandleRow(self, candle):
         timestamp = candle[-2][0]
@@ -61,7 +64,7 @@ class PandasManager():
             result = 1
 
         candlesDF = {
-            'DateTime': timestamp,
+            'DateTime': int(timestamp),
             'Open': candle[-2][1]/1000000,
             'Close': candle[-2][2]/1000000,
             'High': candle[-2][3]/1000000,
@@ -69,7 +72,7 @@ class PandasManager():
             'Result': result
         }
 
-        self.fullFile.append(candlesDF, ignore_index=True)
+        self.df.append(candlesDF, ignore_index=True)
 
     def getTimeFromTimestamp(self, timestamp):
         """
@@ -104,13 +107,18 @@ if __name__ == "__main__":
 
     mNN = nn.IqNeuralNetwork()
     matrix = test.readAllDataframe()
-    print matrix
     matrix = matrix.drop('DateTime', axis=1)
     x_train, y_train, x_test, y_test = mNN.load_data(matrix, 30)
-    print x_train.shape
     #mNN.train(x_train, y_train)
     #mNN.saveModel()
     #X = mNN.load_data(test.readLastNCluster(matrix.ix[:,:-1],30),30)
     #print X
+    print x_test
     predict = mNN.predict(x_test)
     print predict
+
+    import matplotlib.pyplot as plt
+
+    plt.plot(y_test)
+    plt.plot(predict)
+    plt.show()
