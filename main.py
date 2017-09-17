@@ -70,7 +70,7 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
 
             # update chart
             self.graph.clear()
-            self.graph.addDataframe(self.iqStream.getDataFrame())
+            self.graph.addDataframe(self.dataframeManager.readLastNCluster(30))
             self.graph.plot()
 
     def invest(self, amount=1):
