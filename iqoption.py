@@ -48,7 +48,7 @@ class IQOption:
         self.api.getcandles(api_constants.ACTIVES[self.active_id], duration)
         candles = self.api.candles.candles_data
         while not candles:
-            print 'empty candle'
+            sleep(0.1)
             self.api.getcandles(api_constants.ACTIVES[self.active_id], duration)
             candles = self.api.candles.candles_data
 

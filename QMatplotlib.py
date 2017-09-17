@@ -41,7 +41,7 @@ class QMatplotlib(QDialog):
         self.ordercolumns = ['DateTime', 'Open', 'Close', 'High', 'Low']
         self.currentData = pd.DataFrame({'DateTime': [], 'Open': [], 'Close': [], 'High': [], 'Low': []})
 
-    def plot(self, df):
+    def plot(self):
         ''' plot some random stuff '''
         # random data
         #data = [random.random() for i in range(50)]
@@ -51,7 +51,7 @@ class QMatplotlib(QDialog):
 
         # discards the old graph
         # ax.hold(False) # deprecated, see above
-        candlestick2_ohlc(ax, df['Open'], df['High'], df['Low'], df['Close'], width=0.6)
+        candlestick2_ohlc(ax, self.currentData['Open'], self.currentData['High'], self.currentData['Low'], self.currentData['Close'], width=0.6)
 
         # plot data
         #ax.plot(data, 'x-')
