@@ -65,11 +65,11 @@ class PandasManager():
 
         candlesDF = {
             'DateTime': int(timestamp),
-            'Open': candle[-2][1]/1000000,
-            'Close': candle[-2][2]/1000000,
-            'High': candle[-2][3]/1000000,
-            'Low': candle[-2][4]/1000000,
-            'Result': result
+            'Open': float(candle[-2][1])/1000000.0,
+            'Close': float(candle[-2][2])/1000000.0,
+            'High': float(candle[-2][3])/1000000.0,
+            'Low': float(candle[-2][4])/1000000.0,
+            'Result': float(result)
         }
 
         self.df.append(candlesDF, ignore_index=True)
