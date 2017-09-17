@@ -53,12 +53,11 @@ class IQOption:
             candles = self.api.candles.candles_data
 
         if candles:
-            print 'Timestamp: ', datetime.datetime.fromtimestamp(int(candles[-1][0])).strftime('%Y-%m-%d %H:%M:%S')
-            #print(datetime.datetime.fromtimestamp(int(candles[-1][0])).strftime('%Y-%m-%d %H:%M:%S'))
-            print 'Open: ', candles[-1][1]
-            print 'Close: ', candles[-1][2]
-            print 'High: ', candles[-1][3]
-            print 'Low: ', candles[-1][4]
+            # print 'Timestamp: ', datetime.datetime.fromtimestamp(int(candles[-1][0])).strftime('%Y-%m-%d %H:%M:%S')
+            # print 'Open: ', candles[-1][1]
+            # print 'Close: ', candles[-1][2]
+            # print 'High: ', candles[-1][3]
+            # print 'Low: ', candles[-1][4]
 
             return candles[-3], candles[-2], candles[-1]
         else:

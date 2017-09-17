@@ -17,7 +17,6 @@ class PandasManager():
 
         # Init empty current dataframe
         self.df = pd.DataFrame({'DateTime': [], 'Open': [], 'Close': [], 'High': [], 'Low': []})
-        #self.printTest()
 
     def normalizeData(self, df):
         min_max_scaler = preprocessing.MinMaxScaler()
