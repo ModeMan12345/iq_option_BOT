@@ -16,8 +16,7 @@ class PandasManager():
         # replace DateTime with Timestamp
 
         # Init empty current dataframe
-        columns = ['DateTime', 'Open', 'Close', 'High', 'Low']
-        self.df = pd.DataFrame(columns=columns)
+        self.df = pd.DataFrame({'DateTime': [], 'Open': [], 'Close': [], 'High': [], 'Low': []})
         #self.printTest()
 
     def normalizeData(self, df):
@@ -72,7 +71,7 @@ class PandasManager():
             'Result': float(result)
         }
 
-        self.df.append(candlesDF, ignore_index=True)
+        self.df = self.df.append(candlesDF, ignore_index=True)
 
     def getTimeFromTimestamp(self, timestamp):
         """
