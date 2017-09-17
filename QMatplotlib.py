@@ -38,8 +38,8 @@ class QMatplotlib(QDialog):
 
         #store array
         self.prevision = []
-        columns = ['DateTime', 'Open', 'Close', 'High', 'Low']
-        self.currentData = pd.DataFrame(np.nan, index=[0, 1, 2, 3], columns=columns)
+        self.ordercolumns = ['DateTime', 'Open', 'Close', 'High', 'Low']
+        self.currentData = pd.DataFrame({'DateTime': [], 'Open': [], 'Close': [], 'High': [], 'Low': []})
 
     def plot(self):
         ''' plot some random stuff '''
@@ -63,7 +63,11 @@ class QMatplotlib(QDialog):
         self.canvas.draw()
 
     def addDataframe(self, df):
-        self.currentData.append(df, ignore_index=True)
+        # generates a temporary dataframe from dict ("df" is dict type)
+        tmp = pd.DataFrame(df, columns=self.ordercolumns)
+
+        # append temporary dataframe to sel.currentData
+        self.currentData = self.currentData.append(tmp, ignore_index=True)
 
     def addPrevision(self, val):
         pass
