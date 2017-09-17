@@ -72,6 +72,9 @@ class PandasManager():
 
         self.df = self.df.append(candlesDF, ignore_index=True)
 
+    def printDataFrame(self):
+        print(self.df)
+
     def getTimeFromTimestamp(self, timestamp):
         """
         Return time as a String
