@@ -10,7 +10,7 @@ from iqoptionapi.api import IQOptionAPI
 import iqoptionapi.constants as api_constants
 
 
-class IQOption:
+class IQOption():
 
     def __init__(self, user=userdata.mainUser, active_id="EURUSD"):
         self.username = user['username']
@@ -26,13 +26,12 @@ class IQOption:
 
         self.setExpirationTime()
         self.setActives(self.active_id)
-        #self.api.changebalance(self.demo)
+        self.api.changebalance(self.demo)
 
     def openPosition(self, direction, amount=1):
         while self.api.timesync.server_datetime.second != 0:
-            print self.api.timesync.server_datetime.second
+            sleep(0.5)
         self.api.buy(amount, api_constants.ACTIVES[self.active_id], "turbo", direction)
-        sleep(0.5)
 
     def getBalance(self):
         return self.api.profile.balance
