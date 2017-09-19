@@ -2,7 +2,6 @@ _author_ = 'Lorenzo Argentieri'
 
 import time
 import sys
-import datetime
 
 #from Qt import QtWidgets, QtCore
 from PyQtX import QtCore, QtWidgets
@@ -42,15 +41,22 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
 
         # Startup
         self.bootstrapCounter = 0
-        self.updateLog()
-        self.timer()
+        #self.updateLog()
 
-    def timer(self):
-        self.currentTime = QtCore.QTime.currentTime()
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.updateLog)
-        self.timer.start(1000*60)
-        print('Timer Started')
+
+        # Prepare Timer
+        currentTime = QtCore.QTime.currentTime()
+        nextMinute = QtCore.QTime(currentTime.hour(), currentTime.minute()+1)
+        waitSignal = currentTime.secsTo(nextMinute)
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.callback)
+        self.timer.start((waitSignal)*1000)
+
+    def callback(self):
+        print('Callback ')
+        self.timer.start(60*1000)
+        self.updateLog()
+
 
     def updateLog(self):
         # Boostrap
