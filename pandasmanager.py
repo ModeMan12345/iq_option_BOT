@@ -1,5 +1,6 @@
 import os
 import datetime
+from decimal import *
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
@@ -12,6 +13,7 @@ class PandasManager():
         :param nCluster: number of minutes to take in mind
         """
 
+        pd.set_option("display.precision", 10)
         self.fullFile = self.readXLSX()
         # replace DateTime with Timestamp
 

@@ -14,6 +14,8 @@ class QMatplotlib(QDialog):
     def __init__(self, parent=None):
         super(QMatplotlib, self).__init__(parent)
 
+        pd.set_option("display.precision", 10)
+
         # a figure instance to plot on
         self.figure = plt.figure()
 
@@ -51,6 +53,8 @@ class QMatplotlib(QDialog):
 
         # discards the old graph
         # ax.hold(False) # deprecated, see above
+        print self.currentData['Open'], self.currentData['High'], self.currentData['Low'], self.currentData['Close']
+
         candlestick2_ohlc(ax, self.currentData['Open'], self.currentData['High'], self.currentData['Low'], self.currentData['Close'], width=0.6)
 
         # plot data

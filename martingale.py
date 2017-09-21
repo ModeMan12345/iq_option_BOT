@@ -10,14 +10,17 @@ class Martingale():
         return self.invest_current
 
     def calc(self, result):
-        if result == 'loose':
+        if result == 'win':
+            self.invest_current = self.invest_def
+
+        elif result == 'lose':
             self.invest_current = self.invest_current * 2 * self.percent
             if self.invest_current > self.max_martingale:
-                return round(self.invest_def, 2)
-            return round(self.invest_current, 2)
+                self.invest_current = self.invest_def
         else:
-            self.invest_current = self.invest_def
-            return round(self.invest_def, 2)
+            self.invest_current = self.invest_current
+
+        return round(self.invest_current, 2)
 
 
 if __name__ == "__main__":

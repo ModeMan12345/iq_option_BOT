@@ -63,6 +63,8 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
         candleData = self.iqStream.getCandles()
         if candleData:
             self.dataframeManager.appendIQCandleRow(candleData)
+            print self.dataframeManager.df.shape
+            print self.dataframeManager.df
 
             if self.bootstrapCounter > 30:
                 result = self.iqStream.getResult()
@@ -90,19 +92,24 @@ class QtIQOption(QtWidgets.QWidget, QtCore.QObject):
             old, last, current = self.iqStream.getCandles()
 
             # add last candle
-            result = self.neural.predict()## to do
+            price_predict = self.neural.predict()## to do
+
+            # get last investment status
+            result = self.iqStream.getResult()
+            self.martingale.calc(result)
+            investAmount = self.martingale.getCurrentInvest()
 
             lastClose = last[2]
-            print 'FORECAST PRICE: ', result
+            print 'FORECAST PRICE: ', price_predict
 
-            if result >= lastClose:
-                self.iqStream.openPosition(amount=amount, direction="call")
+            if price_predict >= lastClose:
+                self.iqStream.openPosition(amount=investAmount, direction="call")
                 print 'BUY'
             else:
-                self.iqStream.openPosition(amount=amount, direction="put")
+                self.iqStream.openPosition(amount=investAmount, direction="put")
                 print 'SELL'
 
-            return result
+            return price_predict
 
 
 if __name__ == "__main__":

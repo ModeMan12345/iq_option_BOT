@@ -29,8 +29,6 @@ class IQOption():
         self.api.changebalance(self.demo)
 
     def openPosition(self, direction, amount=1):
-        while self.api.timesync.server_datetime.second != 0:
-            sleep(0.5)
         self.api.buy(amount, api_constants.ACTIVES[self.active_id], "turbo", direction)
 
     def getBalance(self):
